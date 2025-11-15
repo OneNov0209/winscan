@@ -1,6 +1,8 @@
 # WinScan - Multi-Chain Blockchain Explorer
 
-![WinScan Logo](public/logo.svg)
+<div align="center">
+  <img src="app/icon.svg" alt="WinScan Logo" width="120" height="120" />
+</div>
 
 **WinScan** is a modern, professional multi-chain blockchain explorer built with Next.js 14 and TypeScript. Monitor multiple Cosmos SDK-based blockchains in real-time with an elegant, minimalist interface.
 
