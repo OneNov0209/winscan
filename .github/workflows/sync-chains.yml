@@ -1,0 +1,49 @@
+name: Sync Chains to VPS
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'Chains/**'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    name: Sync chain configs to VPS
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+      
+      - name: 🔍 Detect changed chains
+        id: changes
+        run: |
+          echo "Files changed in Chains folder:"
+          git diff --name-only HEAD~1 HEAD -- Chains/ || echo "No changes detected"
+          
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD -- Chains/ | wc -l)
+          echo "changed_count=$CHANGED_FILES" >> $GITHUB_OUTPUT
+      
+      - name: 🚀 Trigger VPS sync via SSH
+        if: steps.changes.outputs.changed_count > 0
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          script: |
+            echo "🔄 Syncing chains from GitHub..."
+            /root/sync-chains.sh
+            echo "✅ Chains synced successfully!"
+      
+      - name: ✅ Sync completed
+        if: success()
+        run: |
+          echo "✅ Chain configurations synced to VPS successfully!"
+      
+      - name: ❌ Sync failed
+        if: failure()
+        run: |
+          echo "❌ Failed to sync chains to VPS"
+          exit 1

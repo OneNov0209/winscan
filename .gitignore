@@ -36,3 +36,6 @@ next-env.d.ts
 
 # backend (not included in this repo)
 /backend-api
+
+# personal documentation (not for public)
+SYNC-SETUP.md
