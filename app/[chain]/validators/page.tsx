@@ -77,17 +77,24 @@ export default function ValidatorsPage() {
           const validators = await fetchValidatorsDirectly(lcdEndpoints, 'BOND_STATUS_BONDED', 300);
           
           // Transform to match our ValidatorData interface
-          const formattedValidators = validators.map((v: any) => ({
-            address: v.operator_address,
-            moniker: v.description?.moniker || 'Unknown',
-            identity: v.description?.identity,
-            website: v.description?.website,
-            details: v.description?.details,
-            status: v.status,
-            jailed: v.jailed,
-            votingPower: v.tokens || '0',
-            commission: v.commission?.commission_rates?.rate || '0',
-          }));
+          const formattedValidators = validators
+            .map((v: any) => ({
+              address: v.operator_address,
+              moniker: v.description?.moniker || 'Unknown',
+              identity: v.description?.identity,
+              website: v.description?.website,
+              details: v.description?.details,
+              status: v.status,
+              jailed: v.jailed,
+              votingPower: v.tokens || '0',
+              commission: v.commission?.commission_rates?.rate || '0',
+            }))
+            .filter((v: any) => v.status === 'BOND_STATUS_BONDED' && !v.jailed) // Only active bonded validators
+            .sort((a: any, b: any) => {
+              const tokensA = BigInt(a.votingPower);
+              const tokensB = BigInt(b.votingPower);
+              return tokensB > tokensA ? 1 : tokensB < tokensA ? -1 : 0; // Sort by tokens descending
+            });
           
           startTransition(() => {
             setValidators(formattedValidators);
