@@ -270,7 +270,7 @@ export default function UptimePage() {
           onSelectChain={setSelectedChain}
         />
 
-        <main className="flex-1 mt-16 p-6 overflow-auto">
+        <main className="flex-1 mt-16 p-6">
           {/* Header */}
           <div className="mb-6">
             <div className="flex items-center gap-3 mb-2">
@@ -327,9 +327,18 @@ export default function UptimePage() {
 
           {/* Validators Table */}
           <div className="bg-[#1a1a1a] border border-gray-800 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
+            <div 
+              className="overflow-x-auto scroll-smooth"
+              style={{
+                maxHeight: 'calc(100vh - 400px)',
+                minHeight: '500px',
+                overflowY: 'auto',
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#374151 #1a1a1a'
+              }}
+            >
               <table className="w-full">
-                <thead className="bg-[#0f0f0f] border-b border-gray-800">
+                <thead className="bg-[#0f0f0f] border-b border-gray-800 sticky top-0 z-10">
                   <tr>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
                       {t('uptime.validator')}
