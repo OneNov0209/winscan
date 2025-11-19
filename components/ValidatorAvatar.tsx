@@ -4,7 +4,7 @@ import { getValidatorAvatar } from '@/lib/keybaseUtils';
 import { Users } from 'lucide-react';
 interface ValidatorAvatarProps {
   identity?: string;
-  moniker?: string; // Make optional
+  moniker?: string;
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showMoniker?: boolean;
 }
@@ -16,7 +16,7 @@ const sizeClasses = {
 };
 export default function ValidatorAvatar({ 
   identity, 
-  moniker = 'Unknown Validator', // Default value
+  moniker = 'Unknown Validator',
   size = 'md',
   showMoniker = false 
 }: ValidatorAvatarProps) {

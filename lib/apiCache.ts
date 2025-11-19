@@ -2,7 +2,7 @@ import { cacheManager, chainCache } from './cache';
 export async function fetchWithCache<T>(
   url: string,
   options?: RequestInit,
-  ttl: number = 30000 // 30 seconds default
+  ttl: number = 30000
 ): Promise<T> {
   const cacheKey = `fetch_${url}_${JSON.stringify(options || {})}`;
   return cacheManager.get(
@@ -15,7 +15,7 @@ export async function fetchWithCache<T>(
       return response.json();
     },
     ttl,
-    true // Enable stale-while-revalidate
+    true
   );
 }
 export function debounce<T extends (...args: any[]) => any>(

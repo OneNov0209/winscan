@@ -5,7 +5,7 @@ export function convertValidatorToAccountAddress(validatorAddress: string): stri
     const operatorPrefix = decoded.prefix;
     let accountPrefix = operatorPrefix;
     if (operatorPrefix.endsWith('valoper')) {
-      accountPrefix = operatorPrefix.slice(0, -7); // Remove 'valoper' (7 chars)
+      accountPrefix = operatorPrefix.slice(0, -7);
     }
     const accountAddress = bech32.encode(accountPrefix, decoded.words);
     return accountAddress;

@@ -46,7 +46,7 @@ export class ChainAPI {
       if (!latestHeight) {
         return this.getTransactionsFromBlocks(limit);
       }
-      const searchHeight = latestHeight - 100; // Search last 100 blocks
+      const searchHeight = latestHeight - 100;
       try {
         const response = await axios.get(
           `${this.apiUrl}/cosmos/tx/v1beta1/txs?events=tx.height>${searchHeight}&pagination.limit=${limit}&order_by=2`,

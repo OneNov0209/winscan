@@ -16,10 +16,10 @@ class APILoadBalancer {
   private currentIndex: number = 0;
   private healthStatus: Map<string, EndpointHealth> = new Map();
   private requestCounts: Map<string, number[]> = new Map();
-  private readonly RATE_LIMIT_WINDOW = 10000; // 10 seconds
+  private readonly RATE_LIMIT_WINDOW = 10000;
   private readonly RATE_LIMIT_MAX = 50;
   private readonly MAX_FAILURES = 3;
-  private readonly FAILURE_COOLDOWN = 60000; // 1 minute cooldown
+  private readonly FAILURE_COOLDOWN = 60000;
   constructor(endpoints: Endpoint[]) {
     this.endpoints = endpoints.map(ep => ({
       ...ep,
@@ -90,7 +90,7 @@ class APILoadBalancer {
         const url = `${endpoint.address}${path}`;
         this.recordRequest(endpoint.address);        const response = await fetch(url, {
           ...options,
-          signal: AbortSignal.timeout(15000), // 15 second timeout
+          signal: AbortSignal.timeout(15000),
         });
         if (response.status === 429) {          this.markFailure(endpoint, new Error('Rate limit exceeded'));
           attemptsLeft--;

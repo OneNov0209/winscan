@@ -12,7 +12,6 @@ interface ChainData {
   assets?: Array<{ base?: string; denom_units?: Array<{ denom: string; exponent: number }> }>;
 }
 
-// Load chains data from JSON files
 function loadChainsData(): ChainData[] {
   const chainsDir = path.join(process.cwd(), 'Chains');
   const files = fs.readdirSync(chainsDir).filter(f => f.endsWith('.json') && !f.startsWith('_'));
@@ -31,7 +30,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Chain parameter is required' }, { status: 400 });
     }
 
-    // Find chain config
     const chainsData = loadChainsData();
     const chainConfig = chainsData.find((c: ChainData) => 
       c.chain_name === chain || 
@@ -48,7 +46,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'No LCD endpoints available' }, { status: 500 });
     }
 
-    // Try each LCD endpoint
     for (const endpoint of lcdEndpoints) {
       try {
         const supplyUrl = `${endpoint.address}/cosmos/bank/v1beta1/supply`;
@@ -67,8 +64,7 @@ export async function GET(request: NextRequest) {
         }
 
         const data = await response.json();
-        
-        // Find the main denom supply (usually the first one or the staking denom)
+
         const supply = data.supply || [];
         const mainDenom = chainConfig.assets?.[0]?.base || supply[0]?.denom;
         const mainSupply = supply.find((s: any) => s.denom === mainDenom);

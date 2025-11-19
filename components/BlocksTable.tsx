@@ -20,7 +20,7 @@ export default function BlocksTable({ blocks, chainName, currentPage, onPageChan
   const [animatedBlocks, setAnimatedBlocks] = useState<Set<number>>(new Set());
   useEffect(() => {
     if (blocks.length > 0) {
-      const newBlocks = blocks.slice(0, 3).map(b => b.height); // Animate first 3 blocks
+      const newBlocks = blocks.slice(0, 3).map(b => b.height);
       const newSet = new Set(newBlocks);
       setAnimatedBlocks(newSet);
       const timeout = setTimeout(() => {

@@ -8,7 +8,6 @@ interface ChainData {
   api?: Array<{ address: string; provider?: string }>;
 }
 
-// Load chains data from JSON files
 function loadChainsData(): ChainData[] {
   const chainsDir = path.join(process.cwd(), 'Chains');
   const files = fs.readdirSync(chainsDir).filter(f => f.endsWith('.json') && !f.startsWith('_'));
@@ -27,7 +26,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Find chain config
+
     const chainsData = loadChainsData();
     const chain = chainsData.find((c: ChainData) => 
       c.chain_name === chainParam || 
@@ -44,12 +43,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'No LCD endpoints available' }, { status: 500 });
     }
 
-    // Fetch validators from LCD
     let allValidators: any[] = [];
     
     for (const endpoint of lcdEndpoints) {
       try {
-        // Fetch bonded validators
+
         const bondedUrl = `${endpoint.address}/cosmos/staking/v1beta1/validators?status=BOND_STATUS_BONDED&pagination.limit=300`;
         const bondedRes = await fetch(bondedUrl, {
           headers: { 'Accept': 'application/json' },
@@ -60,7 +58,6 @@ export async function GET(request: NextRequest) {
           const bondedData = await bondedRes.json();
           allValidators = bondedData.validators || [];
 
-          // Try to fetch unbonded/unbonding too
           try {
             const [unbonding, unbonded] = await Promise.allSettled([
               fetch(`${endpoint.address}/cosmos/staking/v1beta1/validators?status=BOND_STATUS_UNBONDING&pagination.limit=300`, {
@@ -80,13 +77,13 @@ export async function GET(request: NextRequest) {
               allValidators = [...allValidators, ...(unbonded.value.validators || [])];
             }
           } catch {
-            // Silent fail for unbonded/unbonding
+
           }
 
-          break; // Success, stop trying other endpoints
+          break;
         }
       } catch (error) {
-        continue; // Try next endpoint
+        continue;
       }
     }
 
@@ -94,7 +91,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to fetch validators' }, { status: 500 });
     }
 
-    // Transform validators with enhanced data
     const enhancedValidators = await Promise.all(
       allValidators.map(async (v: any) => {
         const validator = {
@@ -112,7 +108,6 @@ export async function GET(request: NextRequest) {
           uptime: 100,
         };
 
-        // Fetch delegators count in parallel (non-blocking)
         try {
           for (const endpoint of lcdEndpoints) {
             try {
@@ -132,14 +127,13 @@ export async function GET(request: NextRequest) {
             }
           }
         } catch {
-          // Silent fail
+
         }
 
         return validator;
       })
     );
 
-    // Sort by voting power
     enhancedValidators.sort((a, b) => {
       const tokensA = BigInt(a.votingPower);
       const tokensB = BigInt(b.votingPower);

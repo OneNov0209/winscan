@@ -30,7 +30,7 @@ export function getCache<T>(key: string, maxAge: number = CACHE_EXPIRY): T | nul
       return null;
     }
     if (Date.now() - cacheData.timestamp > maxAge) {
-      return null; // Return null but don't remove - still useful for initial display
+      return null;
     }
     return cacheData.data;
   } catch (err) {

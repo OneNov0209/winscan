@@ -11,7 +11,6 @@ interface ChainData {
   api?: Array<{ address: string; provider?: string }>;
 }
 
-// Load chains data from JSON files
 function loadChainsData(): ChainData[] {
   const chainsDir = path.join(process.cwd(), 'Chains');
   const files = fs.readdirSync(chainsDir).filter(f => f.endsWith('.json') && !f.startsWith('_'));
@@ -31,7 +30,6 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Chain and address parameters required' }, { status: 400 });
     }
 
-    // Find chain config
     const chainsData = loadChainsData();
     const chainConfig = chainsData.find((c: ChainData) => 
       c.chain_name === chain || 
@@ -49,13 +47,11 @@ export async function GET(request: NextRequest) {
     let delegations: any[] = [];
     let unbonding: any[] = [];
 
-    // Try LCD endpoints first
     if (lcdEndpoints.length > 0) {
       for (const endpoint of lcdEndpoints) {
         try {
           console.log(`[Delegations] Trying ${endpoint.provider} for validator ${address}`);
 
-          // Fetch delegations
           const delegationsUrl = `${endpoint.address}/cosmos/staking/v1beta1/validators/${address}/delegations?pagination.limit=1000`;
           const delegationsResponse = await fetch(delegationsUrl, {
             headers: { 'Accept': 'application/json' },
@@ -72,7 +68,6 @@ export async function GET(request: NextRequest) {
             console.log(`[Delegations] ✓ Got ${delegations.length} delegations from ${endpoint.provider}`);
           }
 
-          // Fetch unbonding delegations
           const unbondingUrl = `${endpoint.address}/cosmos/staking/v1beta1/validators/${address}/unbonding_delegations?pagination.limit=1000`;
           const unbondingResponse = await fetch(unbondingUrl, {
             headers: { 'Accept': 'application/json' },
@@ -91,7 +86,6 @@ export async function GET(request: NextRequest) {
             console.log(`[Delegations] ✓ Got ${unbonding.length} unbonding from ${endpoint.provider}`);
           }
 
-          // If we got data, return it
           if (delegations.length > 0 || unbonding.length > 0) {
             return NextResponse.json({
               delegations,
@@ -107,7 +101,6 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Smart fallback: Try ssl.winsnip.xyz if LCD failed
     try {
       console.log(`[Delegations] LCD failed, trying ssl.winsnip.xyz fallback for ${chainPath}`);
       
@@ -129,7 +122,6 @@ export async function GET(request: NextRequest) {
       console.error('[Delegations] Fallback also failed:', fallbackError);
     }
 
-    // Return empty arrays if everything fails
     return NextResponse.json({
       delegations: [],
       unbonding: [],

@@ -35,27 +35,25 @@ export default function TransactionHistoryChart({ data }: TransactionHistoryChar
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     const daysCount = getDaysCount();
-    
-    // Untuk 1 day, gunakan semua data yang ada (bisa jadi per blok/jam)
-    // Untuk range lain, filter berdasarkan hari
+
+
     let chartData;
     
     if (timeRange === '1d' && data && data.length > 0) {
-      // Untuk 1 hari, tampilkan semua data yang ada dalam 24 jam terakhir
+
       const oneDayAgo = new Date();
       oneDayAgo.setHours(oneDayAgo.getHours() - 24);
       
       chartData = data
         .filter(d => new Date(d.date) >= oneDayAgo)
-        .slice(0, 30) // Ambil max 30 data points terakhir
+        .slice(0, 30)
         .reverse();
-      
-      // Jika tidak ada data 1 hari terakhir, pakai data terbaru yang ada
+
       if (chartData.length === 0 && data.length > 0) {
         chartData = data.slice(0, Math.min(10, data.length)).reverse();
       }
     } else {
-      // Untuk range lain, gunakan logic lama
+
       chartData = data && data.length > 0 
         ? data.slice(0, daysCount).reverse() 
         : Array.from({ length: daysCount }, (_, i) => {
@@ -67,8 +65,7 @@ export default function TransactionHistoryChart({ data }: TransactionHistoryChar
             };
           });
     }
-    
-    // Pastikan minimal ada 2 data points untuk chart
+
     if (chartData.length < 2) {
       const now = new Date();
       chartData = [
@@ -177,7 +174,7 @@ export default function TransactionHistoryChart({ data }: TransactionHistoryChar
         let label;
         
         if (timeRange === '1d') {
-          // Untuk 1 day, tampilkan jam
+
           label = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
         } else if (timeRange === '1y') {
           label = `${date.getMonth() + 1}/${date.getFullYear().toString().slice(2)}`;

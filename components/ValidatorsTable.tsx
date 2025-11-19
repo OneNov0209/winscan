@@ -140,9 +140,8 @@ export default function ValidatorsTable({ validators, chainName, asset }: Valida
   const t = (key: string) => getTranslation(language, key);
   
   const totalVotingPower = validators.reduce((sum, v) => sum + parseFloat(v.votingPower || '0'), 0);
-  const activeCount = validators.length; // Already filtered to active only
+  const activeCount = validators.length;
 
-  // Calculate cumulative share for each validator
   const validatorsWithCumulative = validators.map((validator, index) => {
     const cumulativeShare = validators
       .slice(0, index + 1)

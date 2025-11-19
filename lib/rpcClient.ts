@@ -5,7 +5,7 @@ interface RPCConfig {
 }
 interface CacheConfig {
   key: string;
-  ttl: number; // in seconds
+  ttl: number;
 }
 class RPCClient {
   private cache: Map<string, { data: any; timestamp: number; ttl: number }>;
@@ -52,7 +52,7 @@ class RPCClient {
       } catch (error: any) {
         lastError = error;
         console.warn(`[RPC] Failed to fetch from ${rpcUrl}: ${error.message}`);
-        continue; // Try next RPC
+        continue;
       }
     }
     throw new Error(`All RPC endpoints failed. Last error: ${lastError?.message}`);
@@ -94,7 +94,7 @@ export async function fetchValidators(rpcUrls: string[], status: string = 'BOND_
     `/cosmos/staking/v1beta1/validators?status=${status}&pagination.limit=1000`,
     {
       key: `validators_${status}`,
-      ttl: 30, // 30 seconds cache
+      ttl: 30,
     }
   );
 }
@@ -114,7 +114,7 @@ export async function fetchLatestBlock(rpcUrls: string[]) {
     `/cosmos/base/tendermint/v1beta1/blocks/latest`,
     {
       key: 'latest_block',
-      ttl: 6, // 6 seconds cache (1 block)
+      ttl: 6,
     }
   );
 }

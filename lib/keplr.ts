@@ -5,7 +5,7 @@ export interface KeplrChainInfo {
   rpc: string;
   rest: string;
   bip44: {
-    coinType: number; // 118 for Cosmos, 60 for EVM
+    coinType: number;
   };
   bech32Config: {
     bech32PrefixAccAddr: string;
