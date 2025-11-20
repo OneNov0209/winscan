@@ -104,32 +104,16 @@ Default configuration uses our public API, so you don't need to setup backend.
 
 ### Adding New Chains
 
-WinScan supports multiple blockchain networks. To add a new chain:
+Want to add your blockchain to WinScan? It's easy!
 
-1. **Create chain configuration file** in `Chains/` directory
-2. **Follow naming convention**: `{network}-{type}.json`
-   - Example: `lumera-mainnet.json`, `tellor-test.json`
-3. **Use the configuration template** with required fields
+**📖 See [CHAIN-GUIDELINES.md](CHAIN-GUIDELINES.md) for complete instructions**
 
-**📖 For detailed instructions, see [CHAIN-GUIDELINES.md](CHAIN-GUIDELINES.md)**
+Quick overview:
+1. Create JSON file in `Chains/` directory (e.g., `yourchain-mainnet.json`)
+2. Configure RPC, API endpoints, and token details
+3. Test endpoints and push to repository
 
-Quick example:
-```json
-{
-  "chain_name": "your-chain-mainnet",
-  "chain_id": "your-chain-1",
-  "pretty_name": "Your Chain Mainnet",
-  "addr_prefix": "your",
-  "rpc": [{"address": "https://rpc.example.com"}],
-  "api": [{"address": "https://api.example.com"}],
-  "assets": [{
-    "name": "Your Token",
-    "symbol": "TOKEN",
-    "base": "utoken",
-    "exponent": 6
-  }]
-}
-```
+That's it! The explorer will auto-detect your chain.
 
 ### Environment Variables
 
@@ -248,68 +232,51 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🤝 Contributing
 
-We love contributions from the community! Whether you're fixing bugs, adding features, or improving documentation, your help is welcome.
+**We welcome contributions!** Whether you're fixing bugs, adding features, improving docs, or adding new chains - your help makes WinScan better.
 
-### Quick Start for Contributors
+### 🚀 Quick Start
 
-1. **Fork & Clone**
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/winscan.git
-   cd winscan
-   npm install
-   ```
+```bash
+# 1. Fork & clone
+git clone https://github.com/YOUR-USERNAME/winscan.git
+cd winscan
+npm install
 
-2. **Create Feature Branch**
-   ```bash
-   git checkout dev
-   git pull origin dev
-   git checkout -b feature/your-feature
-   ```
+# 2. Create feature branch from dev
+git checkout dev
+git checkout -b feature/amazing-feature
 
-3. **Make Changes & Test**
-   ```bash
-   npm run dev
-   npm run build
-   ```
+# 3. Make changes, test, commit
+npm run dev
+git commit -m "feat: add amazing feature"
 
-4. **Commit & Push**
-   ```bash
-   git add .
-   git commit -m "feat: your feature description"
-   git pull origin dev
-   git push origin feature/your-feature
-   ```
+# 4. Push and create PR to dev branch
+git push origin feature/amazing-feature
+```
 
-5. **Create Pull Request** to `dev` branch
+### 📖 Full Guidelines
 
-### 📖 Detailed Guidelines
-
-**Please read our [Contributing Guide](CONTRIBUTING.md) for:**
-- Complete setup instructions
-- Development workflow
-- Branch strategy (dev vs main)
-- Coding standards
+**Please read [CONTRIBUTING.md](CONTRIBUTING.md) before contributing:**
+- Development workflow & branch strategy
+- Coding standards & best practices
 - Commit message format
-- PR process
+- Pull request process
 - Testing guidelines
-- Do's and don'ts
 
 ### 🎯 Good First Issues
 
-New to the project? Look for issues labeled:
+New contributor? Look for:
 - `good first issue` - Perfect for beginners
-- `help wanted` - Community help welcome
-- `documentation` - Help improve docs
+- `help wanted` - Community contributions welcome
+- `documentation` - Help improve our docs
 
 ### 🏆 Contributors
-
-Thank you to all our amazing contributors! 🎉
 
 <a href="https://github.com/winsnip-official/winscan/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=winsnip-official/winscan" />
 </a>
 
-**Want to see your name here?** Check out [CONTRIBUTING.md](CONTRIBUTING.md) and start contributing today!
+Made with ❤️ by our amazing contributors!
 
 ## 📞 Support & Community
 
